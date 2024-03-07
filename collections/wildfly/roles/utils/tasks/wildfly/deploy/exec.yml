@@ -1,0 +1,31 @@
+---
+- name: "Check required arguments"
+  assert:
+    quiet: yes
+    that:
+      - wildfly_deployment_remote_file is defined
+      - wildfly_deployment_remote_file.stat is defined
+
+- name: "Retrieve remote files to execute"
+  find:
+    paths: "{{ wildfly_deployment_remote_file.stat.path }}"
+    file_type: file
+    recurse: true
+  register: wildfly_deployment_remote_file_children
+
+- block:
+    - name: "Execute JBoss CLI for deploy files"
+      loop: "{{ wildfly_deployment_remote_file_children.files }}"
+      shell:
+        cmd: "{{ wildfly_home }}/bin/jboss-cli.sh -c --commands='deploy --force {{ item.path }}'"
+      register: wildfly_deployment_errors
+  always:
+    - when:
+        - wildfly_deployment_errors is failed
+      name: "Show JBoss CLI errors"
+      loop: "{{ wildfly_deployment_errors.results | selectattr('failed', 'defined') | selectattr('failed', 'equalto', true) }}"
+      loop_control:
+        label: "{{ item.item.path }}"
+      debug:
+        msg: "{{ item.stdout_lines }}"
+

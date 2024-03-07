@@ -1,0 +1,34 @@
+---
+- import_role:
+    name: common
+
+# ---
+# --- Uninstall systemd service
+# ---
+- when:
+    - wildfly_systemd_service_file is not defined
+  block:
+    - name: "Check systemd service state"
+      include_tasks: roles/utils/tasks/systemd/state.yml
+
+- when:
+    - wildfly_systemd_service_file.stat.exists
+  block:
+    - name: "Rollback systemd service"
+      include_tasks: roles/utils/tasks/systemd/rollback.yml
+
+# ---
+# --- Uninstall JBoss WildFly
+# ---
+- when:
+    - wildfly_installation_dir is not defined
+  block:
+    - name: "Check installation state"
+      include_tasks: roles/install/tasks/wildfly/state.yml
+
+- when:
+    - wildfly_installation_dir.stat.exists
+  block:
+    - name: "Rollback installation"
+      include_tasks: roles/install/tasks/wildfly/rollback.yml
+

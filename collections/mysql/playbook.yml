@@ -1,0 +1,7 @@
+---
+- name: "MySQL Automation Pipeline"
+  hosts: "{{ on_hosts | default('localhost') }}"
+
+  tasks:
+    - debug:
+        var: ansible_os_family

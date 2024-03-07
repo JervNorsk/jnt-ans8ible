@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+
+  console:
+    image: ghcr.io/jervnorsk/jnt-ansible-console
+    build:
+      context: services/console
+    volumes:
+      - ./services/console/runtime:/srv/run
+      - ./collections:/srv/ansible/collections
+    working_dir: /srv/run
+    deploy:
+      replicas: 0
+
+  as:
+    image: ghcr.io/jervnorsk/jnt-ansible-host
+    build:
+      context: /srv/container/host
+    privileged: true
+    ports:
+      - "8080:8080"
+      - "9990:9990"
+
+  db:
+    image: ghcr.io/jervnorsk/jnt-ansible-host
+    build:
+      context: /srv/container/host
+    privileged: true
+    ports:
+      - "3306:3306"

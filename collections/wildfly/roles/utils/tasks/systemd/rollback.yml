@@ -1,0 +1,10 @@
+---
+- block:
+    - include_tasks: roles/utils/tasks/systemd/service/stop.yml
+    - include_tasks: roles/utils/tasks/systemd/service/disable.yml
+    - name: "Purge systemd service {{ wildfly_name }}"
+      shell:
+        cmd: "{{ item }}"
+      with_items:
+        - "rm {{ wildfly_systemd_service_path }}"
+        - "systemctl daemon-reload"

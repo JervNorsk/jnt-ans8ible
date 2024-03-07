@@ -1,0 +1,42 @@
+---
+- name: "JBoss Wildfly Automation Pipeline"
+  hosts: "{{ on_hosts | default('localhost') }}"
+
+  tasks:
+    - tags:
+        - absent
+      import_role:
+        name: uninstall
+
+    # TODO: setup must not autorun service until the tag up is not set
+    - tags:
+        - present
+        - up
+      block:
+        - import_role:
+            name: install
+        - import_role:
+            name: setup
+
+    - tags:
+        - down
+      block:
+        - import_role:
+            name: ctl
+          vars:
+            set_state_as: down
+
+    - tags:
+        - up
+      block:
+        - import_role:
+            name: ctl
+          vars:
+            set_state_as: up
+        - when:
+            - apply_cli is defined
+          include_tasks: roles/utils/tasks/wildfly/cli/main.yml
+          vars:
+            files: "{{ apply_cli }}"
+
+# TODO: implement artifact deployment

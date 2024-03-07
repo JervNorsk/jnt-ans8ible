@@ -1,0 +1,10 @@
+---
+- debug:
+    var: as_offline
+- debug:
+    var: wildfly_name
+- import_role:
+    name: middleware_automation.wildfly.wildfly_install
+  vars:
+      wildfly_offline_install: "{{ as_offline | bool }}"
+      wildfly_apply_cp: false

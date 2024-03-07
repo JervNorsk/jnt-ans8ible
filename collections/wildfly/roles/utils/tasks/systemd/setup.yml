@@ -1,0 +1,6 @@
+---
+- include_role:
+    name: middleware_automation.wildfly.wildfly_systemd
+  vars:
+    service_systemd_conf_file: "{{ wildfly_systemd_service_path }}"
+

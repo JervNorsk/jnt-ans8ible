@@ -1,0 +1,4 @@
+---
+- name: "Stop systemd service {{ wildfly_name }}"
+  shell:
+    cmd: "systemctl stop {{ wildfly_name }}"

@@ -1,0 +1,40 @@
+---
+- import_role:
+    name: common
+
+- name: "Check required arguments"
+  assert:
+    quiet: true
+    that:
+      - as_state is defined
+    fail_msg: "as_state must be defined!"
+
+# TODO: use collection port instead
+- when:
+    - as_state == 'up'
+  block:
+    - name: "Check if service instance health is up"
+      wait_for:
+        port: 8080
+        timeout: 10
+        delay: 1
+        sleep: 2
+        state: present
+  rescue:
+    - fail:
+        msg: "JBoss WildFly service is not up!"
+
+# TODO: use collection port instead
+- when:
+    - as_state == 'down'
+  block:
+    - name: "Check if service instance health is down"
+      wait_for:
+        port: 8080
+        timeout: 10
+        delay: 1
+        sleep: 2
+        state: absent
+  rescue:
+    - fail:
+        msg: "JBoss WildFly service is not down!"

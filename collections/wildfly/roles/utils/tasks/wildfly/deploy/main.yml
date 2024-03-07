@@ -1,0 +1,37 @@
+---
+- import_role:
+    name: common
+
+- name: "Check required arguments"
+  assert:
+    quiet: true
+    that:
+      - files is defined
+    fail_msg: "files argument is required!"
+
+- when:
+    - wildfly_installation_dir is not defined
+  name: "Check installation state"
+  include_tasks: roles/install/tasks/wildfly/state.yml
+  vars:
+    files: "{{ files }}"
+
+# ---
+# --- Deploy an artifact on JBoss WildFly by JBoss CLI
+# ---
+- when:
+    - wildfly_installation_dir.stat.exists
+    - files is defined
+  block:
+    - name: "Check deployment files state"
+      include_tasks: state.yml
+    - when:
+        - wildfly_deployment_local_file.stat.exists
+      block:
+        - name: "Upload deployment files"
+          include_tasks: upload.yml
+        - name: "Execute deployment files"
+          include_tasks: exec.yml
+      always:
+        - name: "Cleanup deployment files"
+          include_tasks: cleanup.yml

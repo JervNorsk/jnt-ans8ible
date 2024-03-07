@@ -1,0 +1,12 @@
+---
+- name: "Check arguments"
+  assert:
+    quiet: yes
+    that:
+      - username is defined
+
+- name: "Remove management user {{ username }} for {{ eap_mode }} mode"
+  when:
+    - eap_mode_management_user_file.stat.exists
+  shell:
+    cmd: "sed -i 's/{{ username }}.*//' {{ eap_mode_management_user_file.stat.path }}"

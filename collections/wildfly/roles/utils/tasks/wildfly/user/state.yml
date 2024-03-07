@@ -1,0 +1,18 @@
+---
+- name: "Check arguments"
+  assert:
+    quiet: yes
+    that:
+      - username is defined
+
+- name: "Retrieve management user file state"
+  stat:
+    path: "{{ wildfly_installation_path }}/{{ wildfly_mode }}/configuration/mgmt-users.properties"
+  register: wildfly_mode_management_user_file
+
+- name: "Retrieve management user declarations"
+  shell:
+    cmd: "grep -E '^{{ username }}' {{ wildfly_mode_management_user_file.stat.path }} || exit 0"
+  register: wildfly_mode_management_user_declarations
+  changed_when: False
+

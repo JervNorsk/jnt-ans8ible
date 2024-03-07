@@ -1,0 +1,5 @@
+/system-property=my-prop-a:add(value="this is a")
+
+#if (outcome != success) of /system-property=my-prop-a:read-resource
+#    /system-property=my-prop-a:add(value="this is a")
+#end-if

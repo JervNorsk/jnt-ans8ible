@@ -1,0 +1,55 @@
+---
+- import_role:
+    name: common
+
+- when:
+    - wildfly_installation_dir is not defined
+  name: "Check installation state"
+  include_tasks: roles/install/tasks/wildfly/state.yml
+
+# ---
+# --- Configure JBoss WildFly admin user
+# ---
+- when:
+    - wildfly_installation_dir.stat.exists
+  block:
+    - name: "Check admin user state"
+      include_tasks: roles/utils/tasks/wildfly/user/state.yml
+      vars:
+        username: "{{ wildfly_admin_username }}"
+    - when:
+        - wildfly_mode_management_user_declarations.stdout.find(wildfly_admin_username) == -1
+      block:
+        - name: "Add admin user"
+          include_tasks: roles/utils/tasks/wildfly/user/add.yml
+          vars:
+            username: "{{ wildfly_admin_username }}"
+            password: "{{ wildfly_admin_password }}"
+        - name: "Update admin user state"
+          include_tasks: roles/utils/tasks/wildfly/user/state.yml
+          vars:
+            username: "{{ wildfly_admin_username }}"
+      rescue:
+        - name: "Rollback admin user"
+          include_tasks: roles/utils/tasks/wildfly/user/delete.yml
+          vars:
+            username: "{{ wildfly_admin_username }}"
+
+# ---
+# --- Configure systemd service
+# ---
+- when:
+    - wildfly_installation_dir.stat.exists
+  block:
+    - name: "Check systemd service state"
+      include_tasks: roles/utils/tasks/systemd/state.yml
+    - when:
+        - wildfly_systemd_dir.stat.exists
+      block:
+        - name: "Configure systemd service"
+          include_tasks: roles/utils/tasks/systemd/setup.yml
+        - name: "Update systemd service state"
+          include_tasks: roles/utils/tasks/systemd/state.yml
+      rescue:
+        - name: "Rollback systemd service"
+          include_tasks: roles/utils/tasks/systemd/rollback.yml
