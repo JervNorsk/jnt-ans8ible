@@ -1,0 +1,28 @@
+---
+- import_role:
+    name: common
+
+# ---
+# --- Install JBoss WildFly
+# ---
+- name: "Check installation state"
+  include_tasks: wildfly/state.yml
+
+- when:
+    - wildfly_installation_dir.stat.exists
+  block:
+    - name: "Update installation"
+      include_tasks: wildfly/setup.yml
+    - name: "Update installation state"
+      include_tasks: wildfly/state.yml
+
+- when:
+    - not wildfly_installation_dir.stat.exists
+  block:
+    - name: "Execute installation"
+      include_tasks: wildfly/setup.yml
+    - name: "Update installation state"
+      include_tasks: wildfly/state.yml
+  rescue:
+    - name: "Rollback installation"
+      include_tasks: wildfly/rollback.yml

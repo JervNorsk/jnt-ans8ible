@@ -1,0 +1,5 @@
+---
+- name: "Retrieve installation state"
+  stat:
+    path: "{{ wildfly_installation_path }}"
+  register: wildfly_installation_dir

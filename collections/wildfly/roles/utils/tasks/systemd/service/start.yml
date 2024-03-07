@@ -1,0 +1,4 @@
+---
+- name: "Start systemd service {{ wildfly_name }}"
+  shell:
+    cmd: "systemctl start {{ wildfly_name }}"

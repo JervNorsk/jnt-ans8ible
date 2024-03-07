@@ -1,0 +1,40 @@
+---
+- import_role:
+    name: common
+
+- name: "Check required arguments"
+  assert:
+    quiet: true
+    that:
+      - set_state_as is defined
+    fail_msg: "set_state_as argument is required!"
+
+- when:
+    - set_state_as == 'up'
+  block:
+    - name: "Check systemd service state"
+      include_tasks: roles/utils/tasks/systemd/state.yml
+    - when:
+        - wildfly_systemd_dir.stat.exists
+      block:
+      - name: "Start instance"
+        include_tasks: roles/utils/tasks/systemd/service/start.yml
+      - import_role:
+          name: actuator
+        vars:
+          check_heath_as: up
+
+- when:
+    - set_state_as == 'down'
+  block:
+    - name: "Check systemd service state"
+      include_tasks: roles/utils/tasks/systemd/state.yml
+    - when:
+        - wildfly_systemd_dir.stat.exists
+      block:
+        - name: "Stop instance"
+          include_tasks: roles/utils/tasks/systemd/service/stop.yml
+        - import_role:
+            name: actuator
+          vars:
+            check_heath_as: down

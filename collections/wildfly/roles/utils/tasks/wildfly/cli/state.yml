@@ -1,0 +1,13 @@
+---
+- name: "Check arguments"
+  assert:
+    quiet: yes
+    that:
+      - files is defined
+    fail_msg: "files argument is required!"
+
+- name: "Retrieve local CLI file state"
+  delegate_to: localhost
+  stat:
+    path: "{{ files }}"
+  register: wildfly_cli_local_file

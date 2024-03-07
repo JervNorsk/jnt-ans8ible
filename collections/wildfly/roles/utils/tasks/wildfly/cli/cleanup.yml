@@ -1,0 +1,12 @@
+---
+- name: "Check arguments"
+  assert:
+    quiet: yes
+    that:
+      - wildfly_cli_remote_file is defined
+      - wildfly_cli_remote_file.stat is defined
+
+- name: "Remove remote files"
+  file:
+    path: "{{ wildfly_cli_remote_file.stat.path }}"
+    state: absent

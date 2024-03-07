@@ -1,0 +1,22 @@
+---
+- import_role:
+    name: common
+
+# ---
+# --- Runtime JBoss EAP
+# ---
+- when:
+    - wildfly_installation_dir is not defined
+  block:
+    - name: "Check installation state"
+      include_tasks: roles/install/tasks/wildfly/state.yml
+
+- when:
+    - wildfly_installation_dir.stat.exists
+    - check_heath_as is defined
+  block:
+    - name: "Execute healthcheck"
+      include_tasks: health/check.yml
+      vars:
+        as_state: "{{ check_heath_as }}"
+

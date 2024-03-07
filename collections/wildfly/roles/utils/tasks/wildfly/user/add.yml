@@ -1,0 +1,11 @@
+---
+- name: "Check arguments"
+  assert:
+    quiet: yes
+    that:
+      - username is defined
+      - password is defined
+
+- name: "Add management user {{ username }}"
+  shell:
+    cmd: "{{ wildfly_installation_path }}/bin/add-user.sh -u '{{ username }}' -p '{{ password }}'"

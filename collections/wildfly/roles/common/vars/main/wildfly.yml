@@ -1,0 +1,33 @@
+# ---
+# --- JBoss WildFly Metadata
+# ---
+
+# ---
+# --- JBoss WildFly Installation
+# ---
+wildfly_install_workdir: "{{ wildfly_workspace_path }}"
+wildfly_home: "{{ wildfly_installation_path }}"
+wildfly_archive_filename: "{{ wildfly_installation_name }}.zip"
+
+# ---
+# --- JBoss WildFly Setup
+# ---
+wildfly_admin_username: "admin"
+wildfly_admin_password: "admin"
+
+wildfly_systemd_path: "/etc/systemd"
+wildfly_systemd_service_path: "/usr/lib/systemd/system/{{ wildfly_name }}.service"
+
+wildfly_tmp_dir_path: "{{ wildfly_home }}/tmp"
+wildfly_cli_dir_path: "{{ wildfly_tmp_dir_path }}/cli"
+
+# TODO: implement config base check for trigger setup role update
+wildfly_config_base: "{{ wildfly_mode }}.xml"
+
+# ---
+# --- JBoss WildFly Runtime
+# ---
+wildfly_java_package_name: "java-{{ java_version }}-openjdk-headless"
+
+wildfly_bind_addr: "0.0.0.0"
+wildfly_bind_addr_management: "0.0.0.0"
