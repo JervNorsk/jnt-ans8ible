@@ -7,7 +7,7 @@
     quiet: true
     that:
       - files is defined
-    fail_msg: "files argument is required!"files
+    fail_msg: "files argument is required!"
 
 - when:
     - wildfly_installation_dir is not defined

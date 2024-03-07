@@ -38,5 +38,8 @@
           include_tasks: roles/utils/tasks/wildfly/cli/main.yml
           vars:
             files: "{{ apply_cli }}"
-
-# TODO: implement artifact deployment
+        - when:
+            - deploy_files is defined
+          include_tasks: roles/utils/tasks/wildfly/deploy/main.yml
+          vars:
+            files: "{{ deploy_files }}"
