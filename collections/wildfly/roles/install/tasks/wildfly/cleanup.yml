@@ -1,0 +1,13 @@
+---
+- when:
+    - wildfly_installation_archive_path is defined
+  block:
+    - name: "Ensure installation archive is present"
+      stat:
+        path: "{{ wildfly_installation_archive_path }}"
+      register: wildfly_installation_archive_file
+
+    - name: "Cleanup installation archive"
+      file:
+        path: "{{ wildfly_installation_archive_file.stat.path }}"
+        state: absent
