@@ -31,6 +31,3 @@
   block:
     - name: "Rollback installation"
       include_tasks: roles/install/tasks/wildfly/rollback.yml
-    - name: "Rollback installation"
-      include_tasks: roles/install/tasks/wildfly/cleanup.yml
-

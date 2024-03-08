@@ -10,6 +10,7 @@ wildfly_version: "29.0.0.Final"
 wildfly_workspace_path: "/opt/jboss"
 wildfly_installation_name: "{{ wildfly_name }}-{{ wildfly_version }}"
 wildfly_installation_path: "{{ wildfly_workspace_path }}/{{ wildfly_installation_name }}"
+wildfly_installation_archive_path: "{{ wildfly_installation_path }}.zip"
 
 # ---
 # --- JBoss WildFly Setup
