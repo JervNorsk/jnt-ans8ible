@@ -1,5 +1,5 @@
 ##  ------------------------------------------------------------------------
-## |                   JNT Ansible Wildfly Collection                      |
+## |                   Ansible JBoss Wildfly Collection                    |
 ##  ------------------------------------------------------------------------
 ## Usage:
 ##   make [command] [arguments]
@@ -69,7 +69,8 @@ wildfly: ## Run JBoss Wildfly from JNT collection
         -e wildfly_version=$(with_version) \
         -e wildfly_bind_addr=$(with_bind_addr) \
         -e wildfly_bind_addr_management=$(with_bind_addr_management) \
-        -e apply_cli=$(apply_cli)
+        -e apply_cli=$(apply_cli) \
+        -e deploy_files=$(deploy_files)
 
 wildfly-community: ## Install JBoss Wildfly from Ansible Community collection
 	@ansible-playbook middleware_automation.wildfly.playbook \
