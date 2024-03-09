@@ -1,5 +1,5 @@
 ##  ------------------------------------------------------------------------
-## |                   JNT Ansible Wildfly Collection                      |
+## |                   Ansible JBoss Wildfly Collection                    |
 ##  ------------------------------------------------------------------------
 ## Usage:
 ##   make [command] [arguments]
@@ -20,6 +20,14 @@ endif
 help: ## Show this help
 	@sed -ne '/@sed/!s/^## //p' $(MAKEFILE_LIST) | awk 'BEGIN {FS = "^.*?## "}; {printf "\033[32m  %s\033[0m\n", $$1}'
 	@grep -Eh '\s##\s' $(MAKEFILE_LIST) | awk -F ':.*?##|\\|' '{printf "\033[34m  %25-s\033[36m%s\033[0m\n", $$1, $$2}'
+
+ifndef with_inventory
+    $(error Argument with_inventory is not provided. Please provide with_inventory=<path>)
+endif
+
+ifndef on_hosts
+    $(error Argument on_hosts is not provided. Please provide on_hosts=<hostname>)
+endif
 
 ifndef as_state
 override as_state = up
@@ -53,7 +61,7 @@ eap: ## Run JBoss Wildfly from JNT collection
 
 wildfly: ## Run JBoss Wildfly from JNT collection
 	@ansible-playbook /srv/ansible/collections/wildfly/playbook.yml \
-        -i inventory \
+        -i $(with_inventory) \
         -e on_hosts=$(on_hosts) \
         -t $(as_state) \
         -e as_offline=$(as_offline) \
@@ -61,11 +69,12 @@ wildfly: ## Run JBoss Wildfly from JNT collection
         -e wildfly_version=$(with_version) \
         -e wildfly_bind_addr=$(with_bind_addr) \
         -e wildfly_bind_addr_management=$(with_bind_addr_management) \
-        -e apply_cli=$(apply_cli)
+        -e apply_cli=$(apply_cli) \
+        -e deploy_files=$(deploy_files)
 
 wildfly-community: ## Install JBoss Wildfly from Ansible Community collection
 	@ansible-playbook middleware_automation.wildfly.playbook \
-		-i inventory \
+		-i $(with_inventory) \
 		-e wildfly_version=$(wildfly_version) \
 		-e wildfly_install_workdir=$(wildfly_workdir)/ \
 		-e wildfly_user=$(wildfly_user) \
