@@ -3,11 +3,6 @@
   hosts: "{{ on_hosts | default('localhost') }}"
 
   tasks:
-    - tags:
-        - absent
-      import_role:
-        name: uninstall
-
     # TODO: setup must not autorun service until the tag up is not set
     - tags:
         - present
@@ -19,12 +14,18 @@
             name: setup
 
     - tags:
+        - absent
         - down
       block:
         - import_role:
             name: ctl
           vars:
             set_state_as: down
+
+    - tags:
+        - absent
+      import_role:
+        name: uninstall
 
     - tags:
         - up
