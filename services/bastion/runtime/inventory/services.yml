@@ -4,3 +4,4 @@ services:
     ansible_password: admin
   hosts:
     as:
+    db:

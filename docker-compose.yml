@@ -1,31 +1,21 @@
 version: "3.9"
 
+networks:
+  bastion:
+    name: ansible
+
 services:
 
-  console:
-    image: ghcr.io/jervnorsk/jnt-ansible-console
+  bastion:
+    image: ghcr.io/jervnorsk/jnt-ansible-bastion
     build:
-      context: services/console
+      context: services/bastion
     volumes:
-      - ./services/console/runtime:/srv/run
+      - /run/docker.sock:/run/docker.sock
+      - ./services:/srv/services
       - ./collections:/srv/ansible/collections
-    working_dir: /srv/run
+    working_dir: /srv/services/bastion/runtime
     deploy:
       replicas: 0
-
-  as:
-    image: ghcr.io/jervnorsk/jnt-ansible-host
-    build:
-      context: services/host
-    privileged: true
-    ports:
-      - "8080:8080"
-      - "9990:9990"
-
-  db:
-    image: ghcr.io/jervnorsk/jnt-ansible-host
-    build:
-      context: services/host
-    privileged: true
-    ports:
-      - "3306:3306"
+    networks:
+      bastion:

@@ -1,13 +1,11 @@
-FROM ghcr.io/ansible-community/community-ee-minimal
+FROM alpine
 
 USER root
 
-RUN dnf install -y \
-        procps \
-        iputils \
+RUN apk add --no-cache \
         openssh-server \
- && dnf clean all \
- && rm -r /var/cache/dnf
+        procps \
+        iputils
 
 RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
 RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
