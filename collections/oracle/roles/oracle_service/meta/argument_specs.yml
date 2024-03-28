@@ -1,0 +1,18 @@
+---
+argument_specs:
+  main:
+    options:
+      oracle_service_state:
+        type: str
+        choices:
+          - started
+          - stopped
+        required: false
+        description: |
+          Use this to control the service status.
+
+      oracle_service_enabled:
+        type: bool
+        required: false
+        description: |
+          Whether the service should start on boot of the managed hosts.

@@ -1,0 +1,32 @@
+---
+
+- when:
+    - ansible_facts['os_family'] == 'Alpine'
+  block:
+    - name: "Sets Alpine common facts"
+      set_fact:
+        mysql_package_name: "{{ mysql_package_name_alpine }}"
+        mysql_package_python_name: "{{ mysql_package_python_name_alpine }}"
+        mysql_service_name: "{{ mysql_service_name_alpine }}"
+    - fail:
+        msg: "Not supported yet!"
+
+- when:
+    - ansible_facts['os_family'] == 'Debian'
+  block:
+    - name: "Sets Debian common facts"
+      set_fact:
+        mysql_package_name: "{{ mysql_package_name_debian }}"
+        mysql_package_python_name: "{{ mysql_package_python_name_debian }}"
+        mysql_service_name: "{{ mysql_service_name_debian }}"
+    - fail:
+        msg: "Not supported yet!"
+
+- when:
+    - ansible_facts['os_family'] == 'RedHat'
+  block:
+    - name: "Sets RedHat common facts"
+      set_fact:
+        mysql_package_name: "{{ mysql_package_name_redhat }}"
+        mysql_package_python_name: "{{ mysql_package_python_name_redhat }}"
+        mysql_service_name: "{{ mysql_service_name_redhat }}"

@@ -1,0 +1,24 @@
+mysql_package_name_alpine: mysql-server
+mysql_package_name_debian: mysql-server
+mysql_package_name_redhat: community-mysql-server
+mysql_package_name: "{{ mysql_package_name_redhat }}"
+
+mysql_package_python_name_alpine: python-mysqldb
+mysql_package_python_name_debian: python-pymysql
+mysql_package_python_name_redhat: python3-PyMySQL
+mysql_package_python_name: "{{ mysql_package_python_name_redhat }}"
+
+mysql_service_name_alpine: mysql
+mysql_service_name_debian: mysql
+mysql_service_name_redhat: mysqld
+mysql_service_name: "{{ mysql_service_name_redhat }}"
+
+mysql_service_enabled: true
+
+mysql_root_password: "dev"
+
+mysql_admin_username: "admin"
+mysql_admin_password: "admin"
+
+mysql_workspace_path: "/opt/mysql"
+mysql_db_path: "{{ mysql_workspace_path }}/db"

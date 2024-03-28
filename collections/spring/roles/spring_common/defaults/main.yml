@@ -1,0 +1,12 @@
+spring_installation_packages_alpine:
+  - openjdk17-jre-headless
+spring_installation_packages_debian:
+  - openjdk-17-jre-headless
+spring_installation_packages_redhat:
+  - java-17-openjdk-headless
+
+spring_service_name_alpine: spring
+spring_service_name_debian: spring
+spring_service_name_redhat: spring
+
+spring_service_enabled: true

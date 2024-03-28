@@ -1,0 +1,52 @@
+---
+- name: "Installing required packages"
+  ansible.builtin.package:
+    state: present
+    name:
+      - "{{ mysql_package_name }}"
+      - "{{ mysql_package_python_name }}"
+
+#- name: "Uploading configuration files"
+#  ansible.builtin.copy:
+#    src: .my.cfg
+#    dest: /root/
+
+- name: "Starting service"
+  include_role:
+    name: mysql_service
+  vars:
+    mysql_service_state: started
+
+- name: "Setting root password"
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    login_user: root
+    login_password: ""
+    check_implicit_admin: true
+
+- set_fact:
+    mysql_db_name: "test"
+
+- name: Create MySQL database
+  mysql_db:
+    name: "{{ mysql_db_name }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Create MySQL user
+  mysql_user:
+    name: "{{ mysql_admin_username }}"
+    password: "{{ mysql_admin_password }}"
+    priv: "*.*:ALL,GRANT"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+#- name: "Creating admin user"
+#  community.mysql.mysql_user:
+#    name: "{{ mysql_admin_username }}"
+#    password: "{{ mysql_admin_password }}"
+#    priv: '*.*:ALL,GRANT'
+#    state: present

@@ -8,6 +8,6 @@
 
 - name: "Retrieve local deployment file state"
   delegate_to: localhost
-  stat:
+  ansible.builtin.stat:
     path: "{{ files }}"
   register: wildfly_deployment_local_file

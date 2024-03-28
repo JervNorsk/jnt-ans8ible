@@ -6,7 +6,7 @@
       - username is defined
 
 - name: "Retrieve management user file state"
-  stat:
+  ansible.builtin.stat:
     path: "{{ wildfly_installation_path }}/{{ wildfly_mode }}/configuration/mgmt-users.properties"
   register: wildfly_mode_management_user_file
 

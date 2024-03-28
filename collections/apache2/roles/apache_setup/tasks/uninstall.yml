@@ -1,0 +1,5 @@
+---
+- name: "Removing required packages"
+  ansible.builtin.package:
+    state: absent
+    name: "{{ apache_installation_packages }}"

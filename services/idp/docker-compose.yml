@@ -1,0 +1,17 @@
+version: '3.9'
+
+networks:
+  bastion:
+    name: ansible
+    external: true
+
+services:
+
+  idp:
+    extends:
+      file: ../host/docker-compose.yml
+      service: host
+    networks:
+      bastion:
+    ports:
+      - "389:1389"

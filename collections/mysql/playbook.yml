@@ -3,5 +3,46 @@
   hosts: "{{ on_hosts | default('localhost') }}"
 
   tasks:
-    - debug:
-        var: ansible_os_family
+    - tags:
+        - present
+        - started
+        - up
+      block:
+        - name: "Installing service"
+          include_role:
+            name: mysql_setup
+          vars:
+            mysql_installation_state: present
+
+#    - tags:
+#        - started
+#        - up
+#      block:
+#        - name: "Starting service"
+#          include_role:
+#            name: mysql_service
+#          vars:
+#            mysql_service_state: started
+#        - name: "Configuring databases"
+#          include_role:
+#            name: mysql_db
+#
+#    - tags:
+#        - absent
+#        - stopped
+#        - down
+#      block:
+#        - name: "Stopping service"
+#          include_role:
+#            name: mysql_service
+#          vars:
+#            mysql_service_state: stopped
+#
+#    - tags:
+#        - absent
+#      block:
+#        - name: "Uninstalling service"
+#          include_role:
+#            name: mysql_setup
+#          vars:
+#            mysql_installation_state: absent

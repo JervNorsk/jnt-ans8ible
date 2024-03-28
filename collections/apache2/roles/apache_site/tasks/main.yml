@@ -1,0 +1,45 @@
+---
+- when:
+    - apache_installation.present
+  block:
+    - when:
+        - apache_site_files is defined
+      block:
+        - name: "Gathering site files facts"
+          register: apache_site_local_facts
+          with_items: "{{ apache_site_files.split(',') | list }}"
+          ansible.builtin.stat:
+            path: "{{ item }}"
+          delegate_to: localhost
+
+        - name: "Keeping site files present"
+          with_items: "{{ apache_site_local_facts.results }}"
+          when:
+            - item.stat.exists
+          ansible.builtin.copy:
+            src: "{{ item.stat.path }}"
+            dest: "{{ apache_site_available_path }}/"
+
+    - when:
+        - apache_site_enabled is defined
+      block:
+        - name: "Gathering available sites facts"
+          register: apache_site_available_remote_facts
+          find:
+            paths: "{{ apache_site_available_path }}"
+            file_type: file
+
+#        - debug:
+#            var: apache_site_available_remote_facts
+
+        - name: "Sorting available sites to enable"
+          set_fact:
+            apache_site_remote_files: "{{ apache_site_available_remote_facts.files | sort(attribute='path') }}"
+
+        - name: "Enabling available sites"
+          with_items: "{{ apache_site_remote_files }}"
+          ansible.builtin.copy:
+            src: "{{ item.path }}"
+            dest: "{{ apache_site_enabled_path }}/"
+            remote_src: true
+          notify: "apache_service_event_restart"

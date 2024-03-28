@@ -1,0 +1,12 @@
+---
+argument_specs:
+  main:
+    options:
+      apache_installation_state:
+        type: str
+        choices:
+          - present
+          - absent
+        required: true
+        description: |
+          Use this to control the presence of the service installation.

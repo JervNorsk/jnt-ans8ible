@@ -1,0 +1,17 @@
+version: '3.9'
+
+networks:
+  bastion:
+    name: ansible
+    external: true
+
+services:
+
+  proxy:
+    extends:
+      file: ../host/docker-compose.yml
+      service: host
+    networks:
+      bastion:
+    ports:
+      - "80:80"

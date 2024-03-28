@@ -1,0 +1,9 @@
+---
+- name: "Gathering packages facts"
+  package_facts:
+
+- name: "Validating packages installation"
+  with_items: "{{ spring_installation_packages }}"
+  set_fact:
+    spring_installation:
+      present: "{{ item in ansible_facts.packages }}"

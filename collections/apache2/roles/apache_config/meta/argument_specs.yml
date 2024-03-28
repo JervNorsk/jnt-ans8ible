@@ -1,0 +1,9 @@
+---
+argument_specs:
+  main:
+    options:
+      apache_config_files:
+        type: str
+        required: false
+        description: |
+          Config files to be maintained.

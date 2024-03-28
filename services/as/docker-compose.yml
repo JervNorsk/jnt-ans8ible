@@ -9,7 +9,7 @@ services:
 
   as:
     extends:
-      file: /srv/services/host/docker-compose.yml
+      file: ../host/docker-compose.yml
       service: host
     networks:
       bastion:

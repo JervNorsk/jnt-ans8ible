@@ -7,11 +7,11 @@
       - wildfly_cli_local_file.stat is defined
 
 - name: "Upload local files to remote"
-  copy:
+  ansible.builtin.copy:
     src: "{{ wildfly_cli_local_file.stat.path }}"#/{{ wildfly_mode }}/"
     dest: "{{ wildfly_cli_dir_path }}/"
 
 - name: "Retrieve remote files state"
-  stat:
+  ansible.builtin.stat:
     path: "{{ wildfly_cli_dir_path }}"
   register: wildfly_cli_remote_file

@@ -1,0 +1,19 @@
+---
+- when:
+    - oracle_installation.present
+  block:
+    - when:
+        - oracle_service_state is defined
+      block:
+        - name: "Changing {{ oracle_service_name }} service state"
+          service:
+            name: "{{ oracle_service_name }}"
+            state: "{{ oracle_service_state }}"
+
+    - when:
+        - oracle_service_enabled is defined
+      block:
+        - name: "Changing {{ oracle_service_name }} service presence"
+          service:
+            name: "{{ oracle_service_name }}"
+            enabled: "{{ oracle_service_enabled }}"

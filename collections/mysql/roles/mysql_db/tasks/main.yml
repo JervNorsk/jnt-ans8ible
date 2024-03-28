@@ -1,0 +1,46 @@
+---
+- when:
+    - mysql_installation.present
+  block:
+    - when:
+        - mysql_db_files is defined
+      block:
+        - name: "Gathering database schema files facts"
+          register: mysql_db_local_facts
+          with_items: "{{ mysql_db_files.split(',') | list }}"
+          ansible.builtin.stat:
+            path: "{{ item }}"
+          delegate_to: localhost
+
+        - name: "Keeping database schema files present"
+          with_items: "{{ mysql_db_local_facts.results }}"
+          when:
+            - item.stat.exists
+          ansible.builtin.copy:
+            src: "{{ item.stat.path }}"
+            dest: "{{ mysql_db_path }}/"
+
+        - name: "Gathering database files facts to execute"
+          register: mysql_db_remote_facts
+          find:
+            paths: "{{ mysql_db_path }}"
+            file_type: file
+            recurse: true
+
+#        - debug:
+#            var: mysql_db_remote_facts
+
+        - name: "Sorting database files facts to execute"
+          set_fact:
+            mysql_db_remote_files: "{{ mysql_db_remote_facts.files | sort(attribute='path') | selectattr('path','search','legalentitymanagement') }}"
+
+#        - debug:
+#            var: mysql_db_remote_files
+
+#        - name: "Executing database schema files"
+#          register: mysql_db_execution
+#          with_items: "{{ mysql_db_remote_files }}"
+#          community.mysql.mysql_db:
+#            name: all
+#            state: import
+#            target: "{{ item.path }}"

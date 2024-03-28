@@ -1,0 +1,4 @@
+---
+dependencies:
+  - role: spring_common
+  - role: spring_info

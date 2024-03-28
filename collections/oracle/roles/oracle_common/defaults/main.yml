@@ -1,0 +1,9 @@
+oracle_installation_packages_alpine:
+oracle_installation_packages_debian:
+oracle_installation_packages_redhat:
+
+oracle_service_name_alpine: oracle
+oracle_service_name_debian: oracle
+oracle_service_name_redhat: oracle
+
+oracle_service_enabled: true

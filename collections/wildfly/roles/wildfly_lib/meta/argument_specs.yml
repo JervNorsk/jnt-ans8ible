@@ -1,0 +1,9 @@
+---
+argument_specs:
+  main:
+    options:
+      wildfly_lib_files:
+        type: str
+        required: false
+        description: |
+          Lib files to be maintained.

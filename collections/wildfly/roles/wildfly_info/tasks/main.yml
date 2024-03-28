@@ -1,0 +1,11 @@
+---
+- name: "Retrieve installation state"
+  ansible.builtin.stat:
+    path: "{{ wildfly_installation_path }}"
+  register: wildfly_installation_dir
+
+- name: "Validate installation state"
+  set_fact:
+    wildfly_installation:
+      present: "{{ wildfly_installation_dir.stat.exists }}"
+

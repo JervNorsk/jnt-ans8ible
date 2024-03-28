@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: ldap_common
+
+allow_duplicates: true

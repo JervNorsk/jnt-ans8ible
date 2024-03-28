@@ -4,6 +4,10 @@
 wildfly_name: "wildfly"
 wildfly_version: "29.0.0.Final"
 
+# TODO: implement custom mode from standalone or domain
+# ---   eap_home/(eap_mode=standalone|domain) > eap_home/custom_mode_name
+wildfly_mode: "standalone"
+
 # ---
 # --- JBoss WildFly Installation
 # ---
@@ -11,14 +15,17 @@ wildfly_workspace_path: "/opt/jboss"
 wildfly_installation_name: "{{ wildfly_name }}-{{ wildfly_version }}"
 wildfly_installation_path: "{{ wildfly_workspace_path }}/{{ wildfly_installation_name }}"
 wildfly_installation_archive_path: "{{ wildfly_installation_path }}.zip"
+wildfly_configuration_path: "{{ wildfly_installation_path }}/{{wildfly_mode}}/configuration"
+wildfly_lib_path: "{{ wildfly_installation_path }}/lib"
+wildfly_cli_path: "{{ wildfly_installation_path }}/cli"
+wildfly_module_path: "{{ wildfly_installation_path }}/module"
+wildfly_deployment_path: "{{ wildfly_installation_path }}/{{ wildfly_mode }}/deployments"
+
+wildfly_service_name: "{{ wildfly_name }}"
 
 # ---
 # --- JBoss WildFly Setup
 # ---
-# TODO: implement custom mode from standalone or domain
-# ---   eap_home/(eap_mode=standalone|domain) > eap_home/custom_mode_name
-wildfly_mode: "standalone"
-
 wildfly_admin_username: "admin"
 wildfly_admin_password: "admin"
 

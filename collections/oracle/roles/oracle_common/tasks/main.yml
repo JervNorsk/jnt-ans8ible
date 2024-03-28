@@ -1,0 +1,29 @@
+---
+
+- when:
+    - ansible_facts['os_family'] == 'Alpine'
+  block:
+    - name: "Setting Alpine common facts"
+      set_fact:
+        oracle_installation_packages: "{{ oracle_installation_packages_alpine }}"
+        oracle_service_name: "{{ oracle_service_name_alpine }}"
+    - fail:
+        msg: "Not supported yet!"
+
+- when:
+    - ansible_facts['os_family'] == 'Debian'
+  block:
+    - name: "Setting Debian common facts"
+      set_fact:
+        oracle_installation_packages: "{{ oracle_installation_packages_debian }}"
+        oracle_service_name: "{{ oracle_service_name_debian }}"
+    - fail:
+        msg: "Not supported yet!"
+
+- when:
+    - ansible_facts['os_family'] == 'RedHat'
+  block:
+    - name: "Setting RedHat common facts"
+      set_fact:
+        oracle_installation_packages: "{{ oracle_installation_packages_redhat }}"
+        oracle_service_name: "{{ oracle_service_name_redhat }}"

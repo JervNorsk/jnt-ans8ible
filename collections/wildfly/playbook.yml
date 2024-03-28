@@ -6,41 +6,44 @@
     # TODO: setup must not autorun service until the tag up is not set
     - tags:
         - present
+        - started
         - up
       block:
         - import_role:
             name: install
         - import_role:
             name: setup
+        - include_role:
+            name: wildfly_configuration
+        - include_role:
+            name: wildfly_lib
+
+    - tags:
+        - started
+        - up
+      block:
+        - include_role:
+            name: ctl
+          vars:
+            set_state_as: up
+        - include_role:
+            name: wildfly_cli
+        - include_role:
+            name: wildfly_module
+        - include_role:
+            name: wildfly_deployment
 
     - tags:
         - absent
+        - stopped
         - down
       block:
-        - import_role:
+        - include_role:
             name: ctl
           vars:
             set_state_as: down
 
     - tags:
         - absent
-      import_role:
+      include_role:
         name: uninstall
-
-    - tags:
-        - up
-      block:
-        - import_role:
-            name: ctl
-          vars:
-            set_state_as: up
-        - when:
-            - apply_cli is defined
-          include_tasks: roles/utils/tasks/wildfly/cli/main.yml
-          vars:
-            files: "{{ apply_cli }}"
-        - when:
-            - deploy_files is defined
-          include_tasks: roles/utils/tasks/wildfly/deploy/main.yml
-          vars:
-            files: "{{ deploy_files }}"

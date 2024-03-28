@@ -1,0 +1,22 @@
+apache_installation_packages_alpine:
+  - apache2
+apache_installation_packages_debian:
+  - apache2
+  - libapache2-mod-wsgi
+apache_installation_packages_redhat:
+  - httpd
+
+apache_service_name_alpine: apache2
+apache_service_name_debian: apache2
+apache_service_name_redhat: httpd
+
+apache_service_enabled: true
+
+apache_workspace_path: "/opt/apache2"
+apache_config_path: "{{ apache_workspace_path }}/config"
+
+apache_site_available_path: "/etc/{{ apache_service_name }}/sites-available"
+
+apache_site_enabled_path_debian: "/etc/{{ apache_service_name }}/sites-enabled"
+apache_site_enabled_path_redhat: "/etc/{{ apache_service_name }}/conf.d"
+

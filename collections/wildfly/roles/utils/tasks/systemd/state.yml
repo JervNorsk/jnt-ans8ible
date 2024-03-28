@@ -1,10 +1,10 @@
 ---
 - name: "Retrieve systemd state"
-  stat:
+  ansible.builtin.stat:
     path: "{{ wildfly_systemd_path }}"
   register: wildfly_systemd_dir
 
 - name: "Retrieve systemd service file state"
-  stat:
+  ansible.builtin.stat:
     path: "{{ wildfly_systemd_service_path }}"
   register: wildfly_systemd_service_file

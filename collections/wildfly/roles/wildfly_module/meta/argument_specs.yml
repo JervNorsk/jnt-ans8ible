@@ -1,0 +1,9 @@
+---
+argument_specs:
+  main:
+    options:
+      wildfly_module_files:
+        type: str
+        required: false
+        description: |
+          Module files to be maintained.

@@ -1,0 +1,51 @@
+---
+- name: "Apache2 Automation Pipeline"
+  hosts: "{{ on_hosts | default('localhost') }}"
+
+  tasks:
+    - tags:
+        - present
+        - started
+        - up
+      block:
+        - name: "Installing service"
+          include_role:
+            name: apache_setup
+          vars:
+            apache_installation_state: present
+
+    - tags:
+        - started
+        - up
+      block:
+        - name: "Starting service"
+          include_role:
+            name: apache_service
+          vars:
+            apache_service_state: started
+        - name: "Configuring sites"
+          include_role:
+            name: apache_site
+#        - name: "Configuring configs"
+#          include_role:
+#            name: apache_config
+
+    - tags:
+        - absent
+        - stopped
+        - down
+      block:
+        - name: "Stopping service"
+          include_role:
+            name: apache_service
+          vars:
+            apache_service_state: stopped
+
+    - tags:
+        - absent
+      block:
+        - name: "Uninstalling service"
+          include_role:
+            name: apache_setup
+          vars:
+            apache_installation_state: absent

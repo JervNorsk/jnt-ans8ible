@@ -22,7 +22,7 @@
   always:
     - when:
         - wildfly_cli_errors is failed
-      name: "Show JBoss CLI errors"
+      name: "Show Execution ERRORS"
       loop: "{{ wildfly_cli_errors.results | selectattr('failed', 'defined') | selectattr('failed', 'equalto', true) }}"
       loop_control:
         label: "{{ item.item.path }}"

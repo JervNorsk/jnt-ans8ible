@@ -1,0 +1,16 @@
+ldap_installation_packages_alpine:
+  - openldap
+  - openldap-back-mdb
+  - openldap-clients
+ldap_installation_packages_debian:
+  - slapd
+  - ldap-utils
+ldap_installation_packages_redhat:
+  - openldap-servers
+  - openldap-clients
+
+ldap_service_name_alpine: ldap
+ldap_service_name_debian: ldap
+ldap_service_name_redhat: slapd
+
+ldap_service_enabled: true

@@ -1,0 +1,49 @@
+---
+- when:
+    - apache_installation.present
+  block:
+    - when:
+        - apache_config_files is defined
+      block:
+        - name: "Gathering config files facts"
+          register: apache_config_local_facts
+          with_items: "{{ apache_config_files.split(',') | list }}"
+          ansible.builtin.stat:
+            path: "{{ item }}"
+          delegate_to: localhost
+
+        - name: "Keeping config files present"
+          with_items: "{{ apache_config_local_facts.results }}"
+          when:
+            - item.stat.exists
+          ansible.builtin.copy:
+            src: "{{ item.stat.path }}"
+            dest: "{{ apache_config_path }}/"
+
+        - name: "Gathering config files facts to execute"
+          register: apache_config_remote_facts
+          find:
+            paths: "{{ apache_config_path }}"
+            file_type: file
+            recurse: true
+
+        - name: "Sorting config files facts to execute"
+          set_fact:
+            apache_config_remote_files: "{{ apache_config_remote_facts.files | sort(attribute='path') }}"
+
+        - block:
+            - name: "Executing config files"
+              loop: "{{ apache_config_remote_files }}"
+              shell:
+                cmd: |
+                  sh {{ item.path }}
+              register: apache_config_execution
+          always:
+            - when:
+                - apache_config_execution is failed
+              name: "Show execution errors"
+              loop: "{{ apache_config_execution.results | selectattr('failed', 'defined') | selectattr('failed', 'equalto', true) }}"
+              loop_control:
+                label: "{{ item.item.path }}"
+              debug:
+                msg: "{{ item.stdout_lines }}"

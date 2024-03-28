@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: mysql_common
+
+allow_duplicates: true

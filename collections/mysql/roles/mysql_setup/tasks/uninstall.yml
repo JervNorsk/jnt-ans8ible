@@ -1,0 +1,6 @@
+---
+- name: "Removing required packages"
+  ansible.builtin.package:
+    state: absent
+    name:
+      - "{{ mysql_package_name }}"

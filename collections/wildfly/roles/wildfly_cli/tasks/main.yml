@@ -1,0 +1,61 @@
+---
+- when:
+    - wildfly_installation.present
+  block:
+    - when:
+        - wildfly_cli_files is defined
+      block:
+        - name: "Gathering cli files facts"
+          register: wildfly_cli_local_facts
+          with_items: "{{ wildfly_cli_files.split(',') | list }}"
+          ansible.builtin.stat:
+            path: "{{ item }}"
+          delegate_to: localhost
+
+        - name: "Keeping cli files present"
+          with_items: "{{ wildfly_cli_local_facts.results }}"
+          when:
+            - item.stat.exists
+          ansible.builtin.copy:
+            src: "{{ item.stat.path }}"
+            dest: "{{ wildfly_cli_path }}/"
+
+        - name: "Gathering cli files facts to execute"
+          register: wildfly_cli_remote_facts
+          find:
+            paths: "{{ wildfly_cli_path }}"
+            file_type: file
+            recurse: true
+
+        - name: "Sorting cli files facts to execute"
+          set_fact:
+            wildfly_cli_remote_files: "{{ wildfly_cli_remote_facts.files | sort(attribute='path') }}"
+
+        - block:
+            - name: "Executing cli files"
+              loop: "{{ wildfly_cli_remote_files }}"
+              shell:
+#                cmd: "{{ wildfly_home }}/bin/jboss-cli.sh -c --commands='run-batch --file={{ item.path }}'"
+                cmd: |
+                  {{ wildfly_home }}/bin/jboss-cli.sh -c \
+                    --file={{ item.path }} \
+                    -DJBOSS_HOME={{ wildfly_home }} \
+                    $([ ! -f {{ wildfly_cli_properties | default('/dev/null') }} ] || echo --properties={{ wildfly_cli_properties | default('/dev/null') }})
+              register: wildfly_cli_execution
+          always:
+            - when:
+                - wildfly_cli_execution is failed
+              name: "Show Execution ERRORS"
+              loop: "{{ wildfly_cli_execution.results | selectattr('failed', 'defined') | selectattr('failed', 'equalto', true) }}"
+              loop_control:
+                label: "{{ item.item.path }}"
+              debug:
+                msg: "{{ item.stdout_lines }}"
+
+#        - when:
+#            - wildfly_cli_execution is succeeded
+#          block:
+#            - name: "Restart service for update the configuration"
+#              service:
+#                name: "{{ wildfly_service_name }}"
+#                state: restarted

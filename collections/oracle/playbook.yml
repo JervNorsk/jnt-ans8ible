@@ -1,0 +1,45 @@
+---
+- name: "ORACLE Automation Pipeline"
+  hosts: "{{ on_hosts | default('localhost') }}"
+
+  tasks:
+    - tags:
+        - present
+        - started
+        - up
+      block:
+        - name: "Installing service"
+          include_role:
+            name: oracle_setup
+          vars:
+            oracle_installation_state: present
+
+    - tags:
+        - started
+        - up
+      block:
+        - name: "Starting service"
+          include_role:
+            name: oracle_service
+          vars:
+            oracle_service_state: started
+
+    - tags:
+        - absent
+        - stopped
+        - down
+      block:
+        - name: "Stopping service"
+          include_role:
+            name: oracle_service
+          vars:
+            oracle_service_state: stopped
+
+    - tags:
+        - absent
+      block:
+        - name: "Uninstalling service"
+          include_role:
+            name: oracle_setup
+          vars:
+            oracle_installation_state: absent

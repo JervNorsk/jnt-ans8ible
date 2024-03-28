@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: apache_common
+
+allow_duplicates: true

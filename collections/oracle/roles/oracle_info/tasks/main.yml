@@ -1,0 +1,9 @@
+---
+- name: "Gathering packages facts"
+  package_facts:
+
+- name: "Validating packages installation"
+  with_items: "{{ oracle_installation_packages }}"
+  set_fact:
+    oracle_installation:
+      present: "{{ item in ansible_facts.packages }}"

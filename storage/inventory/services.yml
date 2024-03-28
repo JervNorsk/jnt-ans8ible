@@ -1,0 +1,9 @@
+services:
+  vars:
+    ansible_user: root
+    ansible_password: admin
+  hosts:
+    as:
+    db:
+    idp:
+    proxy:

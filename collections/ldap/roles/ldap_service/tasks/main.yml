@@ -1,0 +1,19 @@
+---
+- when:
+    - ldap_installation.present
+  block:
+    - when:
+        - ldap_service_state is defined
+      block:
+        - name: "Changing {{ ldap_service_name }} service state"
+          service:
+            name: "{{ ldap_service_name }}"
+            state: "{{ ldap_service_state }}"
+
+    - when:
+        - ldap_service_enabled is defined
+      block:
+        - name: "Changing {{ ldap_service_name }} service presence"
+          service:
+            name: "{{ ldap_service_name }}"
+            enabled: "{{ ldap_service_enabled }}"

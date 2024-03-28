@@ -1,0 +1,67 @@
+---
+- when:
+    - wildfly_installation.present
+  block:
+    - when:
+        - wildfly_module_files is defined
+      block:
+        - name: "Gathering module files facts"
+          register: wildfly_module_local_facts
+          with_items: "{{ wildfly_module_files.split(',') | list }}"
+          ansible.builtin.stat:
+            path: "{{ item }}"
+          delegate_to: localhost
+
+        - name: "Keeping module files present"
+          with_items: "{{ wildfly_module_local_facts.results }}"
+          when:
+            - item.stat.exists
+          ansible.builtin.copy:
+            src: "{{ item.stat.path }}"
+            dest: "{{ wildfly_module_path }}/"
+
+        - name: "Gathering module files facts to execute"
+          register: wildfly_module_remote_facts
+          find:
+            paths: "{{ wildfly_module_path }}"
+            file_type: file
+            recurse: true
+
+        - name: "Sorting module files facts to execute"
+          set_fact:
+            wildfly_module_remote_files: "{{ wildfly_module_remote_facts.files | sort(attribute='path') }}"
+
+        - name: "Excluding module files that are not executable"
+          set_fact:
+            wildfly_module_remote_files: "{{ wildfly_module_remote_files | selectattr('path', 'search', 'install') }}"
+
+        - block:
+            - name: "Executing module files"
+              loop: "{{ wildfly_module_remote_files }}"
+              shell:
+#                cmd: "{{ wildfly_home }}/bin/jboss-module.sh -c --commands='run-batch --file={{ item.path }}'"
+#                cmd: |
+#                  {{ wildfly_home }}/bin/jboss-module.sh -c \
+#                    --file={{ item.path }} \
+#                    -D
+                cmd: |
+                  JBOSS_HOME={{ wildfly_home }} \
+                  sh {{ item.path }}
+              register: wildfly_module_execution
+          always:
+            - when:
+                - wildfly_module_execution is failed
+              name: "Show Execution ERRORS"
+              loop: "{{ wildfly_module_execution.results | selectattr('failed', 'defined') | selectattr('failed', 'equalto', true) }}"
+              loop_control:
+                label: "{{ item.item.path }}"
+              debug:
+                msg: "{{ item.stdout_lines }}"
+
+#        - when:
+#            - wildfly_module_execution is succeeded
+#          block:
+#            - name: "Restart service for update the configuration"
+#              service:
+#                name: "{{ wildfly_service_name }}"
+#                state: restarted

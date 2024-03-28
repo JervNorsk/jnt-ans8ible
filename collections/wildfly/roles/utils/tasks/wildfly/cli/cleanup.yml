@@ -7,6 +7,6 @@
       - wildfly_cli_remote_file.stat is defined
 
 - name: "Remove remote files"
-  file:
+  ansible.builtin.file:
     path: "{{ wildfly_cli_remote_file.stat.path }}"
     state: absent

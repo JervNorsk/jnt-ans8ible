@@ -1,0 +1,14 @@
+---
+argument_specs:
+  main:
+    options:
+      apache_site_files:
+        type: str
+        required: false
+        description: |
+          Site files to be maintained.
+      apache_site_enabled:
+        type: str
+        required: false
+        description: |
+          Available sites to be enabled.

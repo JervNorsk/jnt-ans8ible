@@ -1,0 +1,5 @@
+---
+- name: "Installing required packages"
+  ansible.builtin.package:
+    state: present
+    name: "{{ ldap_installation_packages }}"

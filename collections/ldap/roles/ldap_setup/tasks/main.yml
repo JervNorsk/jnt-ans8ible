@@ -1,0 +1,14 @@
+---
+- when:
+    - ldap_installation_state == 'present'
+  block:
+    - name: "Configure installation"
+      include_tasks:
+        file: install.yml
+
+- when:
+    - ldap_installation_state == 'absent'
+  block:
+    - name: "Remove installation"
+      include_tasks:
+        file: uninstall.yml

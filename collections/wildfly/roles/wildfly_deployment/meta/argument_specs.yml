@@ -1,0 +1,9 @@
+---
+argument_specs:
+  main:
+    options:
+      wildfly_deployment_files:
+        type: str
+        required: false
+        description: |
+          Deployment files to be maintained.

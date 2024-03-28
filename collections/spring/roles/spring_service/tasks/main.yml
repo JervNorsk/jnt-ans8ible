@@ -1,0 +1,19 @@
+---
+- when:
+    - spring_installation.present
+  block:
+    - when:
+        - spring_service_state is defined
+      block:
+        - name: "Changing {{ spring_service_name }} service state"
+          service:
+            name: "{{ spring_service_name }}"
+            state: "{{ spring_service_state }}"
+
+    - when:
+        - spring_service_enabled is defined
+      block:
+        - name: "Changing {{ spring_service_name }} service presence"
+          service:
+            name: "{{ spring_service_name }}"
+            enabled: "{{ spring_service_enabled }}"

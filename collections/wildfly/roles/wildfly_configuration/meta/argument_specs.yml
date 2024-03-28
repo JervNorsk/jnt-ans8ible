@@ -1,0 +1,9 @@
+---
+argument_specs:
+  main:
+    options:
+      wildfly_configuration_files:
+        type: str
+        required: false
+        description: |
+          Configuration files to be maintained.

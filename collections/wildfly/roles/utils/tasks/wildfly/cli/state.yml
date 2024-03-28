@@ -8,6 +8,6 @@
 
 - name: "Retrieve local CLI file state"
   delegate_to: localhost
-  stat:
+  ansible.builtin.stat:
     path: "{{ files }}"
   register: wildfly_cli_local_file

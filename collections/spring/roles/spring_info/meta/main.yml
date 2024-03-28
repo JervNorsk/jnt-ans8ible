@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: spring_common
+
+allow_duplicates: true

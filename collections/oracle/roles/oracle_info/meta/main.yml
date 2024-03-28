@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: oracle_common
+
+allow_duplicates: true

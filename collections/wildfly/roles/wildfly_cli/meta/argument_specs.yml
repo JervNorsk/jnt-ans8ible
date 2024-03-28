@@ -1,0 +1,15 @@
+---
+argument_specs:
+  main:
+    options:
+      wildfly_cli_files:
+        type: str
+        required: false
+        description: |
+          JBoss CLI files to be maintained.
+      wildfly_cli_properties:
+        type: str
+        required: false
+        default: /dev/null
+        description: |
+          JBoss CLI properties file to use when execute CLIs.

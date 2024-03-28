@@ -1,0 +1,18 @@
+---
+- when:
+    - mysql_installation_state == 'present'
+  block:
+    - name: "Configure installation"
+      include_tasks:
+        file: install.yml
+
+- when:
+    - mysql_installation_state == 'absent'
+  block:
+    - name: "Remove installation"
+      include_tasks:
+        file: uninstall.yml
+
+#- name: "Configure service"
+#  include_role:
+#    role: mysql_service

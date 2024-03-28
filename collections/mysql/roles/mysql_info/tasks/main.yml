@@ -1,0 +1,8 @@
+---
+- name: "Gathering package {{ mysql_package_name }} facts"
+  package_facts:
+
+- name: "Validating package {{ mysql_package_name }} installation"
+  set_fact:
+    mysql_installation:
+      present: "{{ mysql_package_name in ansible_facts.packages }}"

@@ -1,0 +1,35 @@
+---
+
+- when:
+    - ansible_facts['os_family'] == 'Alpine'
+  block:
+    - name: "Setting Alpine common facts"
+      set_fact:
+        apache_installation_packages: "{{ apache_installation_packages_alpine }}"
+        apache_service_name: "{{ apache_service_name_alpine }}"
+    - fail:
+        msg: "Not supported yet!"
+
+- when:
+    - ansible_facts['os_family'] == 'Debian'
+  block:
+    - name: "Setting Debian common facts"
+      set_fact:
+        apache_installation_packages: "{{ apache_installation_packages_debian }}"
+        apache_service_name: "{{ apache_service_name_debian }}"
+    - name: "Setting RedHat common facts"
+      set_fact:
+        apache_site_enabled_path: "{{ apache_site_enabled_path_debian }}"
+#    - fail:
+#        msg: "Not supported yet!"
+
+- when:
+    - ansible_facts['os_family'] == 'RedHat'
+  block:
+    - name: "Setting RedHat common facts"
+      set_fact:
+        apache_installation_packages: "{{ apache_installation_packages_redhat }}"
+        apache_service_name: "{{ apache_service_name_redhat }}"
+    - name: "Setting RedHat common facts"
+      set_fact:
+        apache_site_enabled_path: "{{ apache_site_enabled_path_redhat }}"

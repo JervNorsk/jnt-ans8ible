@@ -3,8 +3,8 @@ version: '3.9'
 services:
 
   host:
-    image: ghcr.io/jervnorsk/jnt-ansible-host-${with_os}
+    image: ansible-host-${with_os}-${with_service_host}
     build:
-      context: /srv/services/host
+      context: .
       dockerfile: os/${with_os}/Dockerfile
     privileged: true

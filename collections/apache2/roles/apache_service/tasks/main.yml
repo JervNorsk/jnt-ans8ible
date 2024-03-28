@@ -1,0 +1,19 @@
+---
+- when:
+    - apache_installation.present
+  block:
+    - when:
+        - apache_service_state is defined
+      block:
+        - name: "Changing {{ apache_service_name }} service state"
+          service:
+            name: "{{ apache_service_name }}"
+            state: "{{ apache_service_state }}"
+
+    - when:
+        - apache_service_enabled is defined
+      block:
+        - name: "Changing {{ apache_service_name }} service presence"
+          service:
+            name: "{{ apache_service_name }}"
+            enabled: "{{ apache_service_enabled }}"

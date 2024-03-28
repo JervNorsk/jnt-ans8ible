@@ -1,0 +1,23 @@
+version: "3.9"
+
+networks:
+  bastion:
+    name: ansible
+
+services:
+
+  bastion:
+    image: ansible-bastion
+    build:
+      context: .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ..:/srv/services
+      - ../../collections:/srv/ansible/collections
+      - ../../storage:/srv/storage
+      - ../../iac:/srv/iac
+    working_dir: /srv/storage
+    deploy:
+      replicas: 0
+    networks:
+      bastion:

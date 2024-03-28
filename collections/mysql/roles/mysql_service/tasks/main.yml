@@ -1,0 +1,19 @@
+---
+- when:
+    - mysql_installation.present
+  block:
+    - when:
+        - mysql_service_state is defined
+      block:
+        - name: "Changing {{ mysql_service_name }} service state"
+          service:
+            name: "{{ mysql_service_name }}"
+            state: "{{ mysql_service_state }}"
+
+    - when:
+        - mysql_service_enabled is defined
+      block:
+        - name: "Changing {{ mysql_service_name }} service presence"
+          service:
+            name: "{{ mysql_service_name }}"
+            enabled: "{{ mysql_service_enabled }}"

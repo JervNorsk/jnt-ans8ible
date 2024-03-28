@@ -1,0 +1,21 @@
+---
+- when:
+    - wildfly_installation.present
+  block:
+    - when:
+        - wildfly_lib_files is defined
+      block:
+        - name: "Gathering lib files facts"
+          register: wildfly_lib_local_facts
+          with_items: "{{ wildfly_lib_files.split(',') | list }}"
+          ansible.builtin.stat:
+            path: "{{ item }}"
+          delegate_to: localhost
+
+        - name: "Keeping lib files present"
+          with_items: "{{ wildfly_lib_local_facts.results }}"
+          when:
+            - item.stat.exists
+          ansible.builtin.copy:
+            src: "{{ item.stat.path }}"
+            dest: "{{ wildfly_lib_path }}/"
